@@ -1,75 +1,74 @@
 import mongoose from 'mongoose';
 
-// Building Schema
+// --- Building Schema ---
 const BuildingSchema = new mongoose.Schema({
-  owner: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
-    required: true 
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  name: { 
-    type: String, 
-    required: true 
+  name: {
+    type: String,
+    required: true
   },
-  address: { 
-    type: String, 
-    required: true 
-  },
-  familyRooms: {
-    type: Number,
-    default: 0
-  },
-  bachelorRooms: {
-    type: Number,
-    default: 0
-  },
-  shopRooms: {
-    type: Number,
-    default: 0
-  },
-  godowns: {
-    type: Number,
-    default: 0
-  },
-  hallSpaces: {
-    type: Number,
-    default: 0
+  address: {
+    street: { type: String },
+    city: { type: String },
+    state: { type: String },
+    pincode: { type: String }
   },
   description: String,
   constructionYear: Number,
-  createdAt: { type: Date, default: Date.now }
+  images: [String],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-// Unit Schema
+// 🛠️ Virtual populate
+BuildingSchema.virtual('units', {
+  ref: 'Unit',
+  localField: '_id',
+  foreignField: 'building'
+});
+
+// Enable virtuals in JSON and Object output
+BuildingSchema.set('toObject', { virtuals: true });
+BuildingSchema.set('toJSON', { virtuals: true });
+
+const Building = mongoose.model('Building', BuildingSchema);
+
+// --- Unit Schema ---
 const UnitSchema = new mongoose.Schema({
-  building: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Building', 
-    required: true 
+  building: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Building',
+    required: true
   },
-  unitType: { 
-    type: String, 
-    enum: ['FamilyRoom', 'BachelorRoom', 'ShopRoom', 'Godown', 'HallSpace'], 
-    required: true 
+  unitType: {
+    type: String,
+    enum: ['FamilyRoom', 'BachelorRoom', 'ShopRoom', 'Godown', 'HallSpace'],
+    required: true
   },
-  unitNumber: { 
-    type: String, 
-    required: true 
+  unitNumber: {
+    type: String,
+    required: true
   },
   floor: Number,
   size: Number,
-  rent: { 
-    type: Number, 
-    required: true 
+  rent: {
+    type: Number,
+    required: true
   },
-  status: { 
-    type: String, 
-    enum: ['Vacant', 'Occupied'], 
-    default: 'Vacant' 
+  status: {
+    type: String,
+    enum: ['Vacant', 'Occupied'],
+    default: 'Vacant'
   },
   bedrooms: {
     type: Number,
-    default: function() {
+    default: function () {
       if (this.unitType === 'FamilyRoom') return 2;
       if (this.unitType === 'BachelorRoom') return 1;
       return 0;
@@ -78,7 +77,7 @@ const UnitSchema = new mongoose.Schema({
   specialFeature: {
     type: String,
     enum: ['Balcony', 'Street Facing', 'Storage Area'],
-    default: function() {
+    default: function () {
       if (this.unitType === 'ShopRoom') return 'Street Facing';
       if (this.unitType === 'FamilyRoom') return 'Balcony';
       if (this.unitType === 'Godown') return 'Storage Area';
@@ -89,8 +88,7 @@ const UnitSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Export Models
-const Building = mongoose.model('Building', BuildingSchema);
 const Unit = mongoose.model('Unit', UnitSchema);
 
+// ✅ Export both using named export
 export { Building, Unit };

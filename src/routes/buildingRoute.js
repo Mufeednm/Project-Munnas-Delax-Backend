@@ -1,10 +1,13 @@
 import express from 'express';
-import { createBuildings } from '../controllers/buildingController';
+import {  buildingDetails, createBuildingUnits, createBuildings } from '../controllers/buildingController.js';
 
 
 const router = express.Router();
 
-router.post('/', createBuildings);      
+// router.post('/units', createBuildingUnits);      
+router.post('/', createBuildings);  
+router.get('/', buildingDetails);  
+router.post('/units', createBuildingUnits);    
 // router.get('/', getAllUsers);         // GET /api/users
 // router.get('/:id', getUserById);      // GET /api/users/:id
 // router.put('/:id', updateUser);       // PUT /api/users/:id
