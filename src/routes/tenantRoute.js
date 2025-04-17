@@ -1,15 +1,13 @@
 import express from 'express';
-import {  buildingDetails, buildings, createBuildingUnits, createBuildings, vaccuntUnits } from '../controllers/buildingController.js';
+import { createTenant } from '../controllers/tenantController.js';
 
 
 const router = express.Router();
 
 // router.post('/units', createBuildingUnits);      
-router.post('/', createBuildings);  
-router.get('/', buildings);  
-router.get('/details', buildingDetails);  
-router.post('/units', createBuildingUnits);    
-router.get('/units/vaccunt', vaccuntUnits);    
+router.post('/', createTenant);  
+// router.get('/', buildingDetails);  
+// router.post('/units', createBuildingUnits);    
 // router.get('/', getAllUsers);         // GET /api/users
 // router.get('/:id', getUserById);      // GET /api/users/:id
 // router.put('/:id', updateUser);       // PUT /api/users/:id

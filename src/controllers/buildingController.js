@@ -1,4 +1,4 @@
-import { Building, Unit } from "../models/building.js";
+import { Building, Unit,  } from "../models/building.js";
 import User from "../models/users.js";
 
 export const createBuildings = async (req, res) => {
@@ -41,6 +41,27 @@ export const createBuildings = async (req, res) => {
     });
   }
 };
+
+export const buildings = async (req, res) => {
+  try {
+    const buildingData = await Building.find()
+      .select('name images') // Only include name, images, and _id (included by default)
+ 
+
+    res.status(200).json({
+      success: true,
+      building: buildingData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching building',
+      error: error.message,
+    });
+  }
+};
+
+
 export const buildingDetails = async (req, res) => {
   try {
     const { building } = req.body;
@@ -61,6 +82,8 @@ export const buildingDetails = async (req, res) => {
     });
   }
 };
+
+
 
 
 export const createBuildingUnits = async (req, res) => {
@@ -127,3 +150,26 @@ export const createBuildingUnits = async (req, res) => {
     });
   }
 };
+
+export const vaccuntUnits = async (req, res) => {
+  try {
+       // Check if unit number already exists in this building
+       const vaccuntUnit = await Unit.find({ 
+        status: 'Vacant' // Use building ID here
+      
+      }).populate({ path: 'building', select: 'name' }) // only owner's name; 
+
+      res.status(201).json({
+        success: true,
+        data: vaccuntUnit,
+        message: 'List of Vaccunt Rooms'
+      });
+  } catch (error) {
+    res.status(400).json({ 
+      success: false,
+      message: 'Error List of Vaccunt Rooms', 
+      error: error.message 
+    });
+  }
+}
+
