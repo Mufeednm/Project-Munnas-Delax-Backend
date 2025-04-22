@@ -5,10 +5,17 @@ import connectDB from './src/config/db.js';
 import userRoutes from './src/routes/userRoute.js';
 import buildingRoutes from './src/routes/buildingRoute.js';
 import tenantRoute from './src/routes/tenantRoute.js';
+import cors from 'cors';
 dotenv.config();
 connectDB();
 
 const app = express();
+
+// Set up permissive CORS for development
+app.use(cors())
+
+app.use(express.json());
+
 app.use(express.json());
 
 app.use('/api/users', userRoutes);

@@ -45,7 +45,7 @@ export const createBuildings = async (req, res) => {
 export const buildings = async (req, res) => {
   try {
     const buildingData = await Building.find()
-      .select('name images') // Only include name, images, and _id (included by default)
+      .select('name images description') // Only include name, images, and _id (included by default)
  
 
     res.status(200).json({
@@ -64,15 +64,16 @@ export const buildings = async (req, res) => {
 
 export const buildingDetails = async (req, res) => {
   try {
-    const { building } = req.body;
+    const { buildingId } = req.body;
 
-    const buildingData = await Building.findOne({ name: building })
+    console.log("not coming is it",buildingId);
+    const buildingData = await Building.findById(buildingId)
       .populate({ path: 'owner', select: 'name' }) // only owner's name
       .populate('units'); // virtual populate
 
     res.status(200).json({
       success: true,
-      building: buildingData,
+      data: buildingData,
     });
   } catch (error) {
     res.status(500).json({

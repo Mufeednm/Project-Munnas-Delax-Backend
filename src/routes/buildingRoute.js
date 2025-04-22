@@ -7,7 +7,7 @@ const router = express.Router();
 // router.post('/units', createBuildingUnits);      
 router.post('/', createBuildings);  
 router.get('/', buildings);  
-router.get('/details', buildingDetails);  
+router.post('/details', buildingDetails);  
 router.post('/units', createBuildingUnits);    
 router.get('/units/vaccunt', vaccuntUnits);    
 // router.get('/', getAllUsers);         // GET /api/users
