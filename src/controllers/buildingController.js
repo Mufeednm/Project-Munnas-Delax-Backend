@@ -44,9 +44,14 @@ export const createBuildings = async (req, res) => {
 
 export const buildings = async (req, res) => {
   try {
-    const buildingData = await Building.find()
+    let buildingData = await Building.find()
       .select('name images description') // Only include name, images, and _id (included by default)
-      .sort({ name: -1 }); // Sort by name in descending order
+
+      buildingData = buildingData.sort((a, b) => {
+        if (a.name.includes("Munnas Deluxe Building")) return -1;
+        if (b.name.includes("Munnas Deluxe Building")) return 1;
+        return 0;
+      });
 
     res.status(200).json({
       success: true,
