@@ -46,7 +46,7 @@ export const buildings = async (req, res) => {
   try {
     const buildingData = await Building.find()
       .select('name images description') // Only include name, images, and _id (included by default)
-      .sort({ _id: -1 }); 
+      .sort({ name: -1 }); // Sort by name in descending order
 
     res.status(200).json({
       success: true,
